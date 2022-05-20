@@ -14,14 +14,10 @@ void transformGet(int argc, char **argv, int *opt_index, sPng *image, char *file
         switch (opt)
         {
             case 'f':
-                puts("from");
                 color1 = optarg;
-                printf("%s\n", optarg);
                 break;
             case 't':
-                puts("to");
                 color2 = optarg;
-                printf("%s\n", optarg);
                 break;
             case '?':
             default:
@@ -44,18 +40,13 @@ void transformPNG(sPng *image, char *color1, char *color2){
         if(!strcmp(color1, colours[i])) index1 = i;
         if(!strcmp(color2, colours[i])) index2 = i;
     }
-    int *parametrs1 = (int *)calloc(3, sizeof(int));
-    int *parametrs2 = (int *)calloc(3, sizeof(int));
-    char *c1 = (char *)calloc(strlen(color1) + 1, sizeof(char));
-    char *c2 = (char *)calloc(strlen(color2) + 1, sizeof(char));
-    strcpy(c1, color1);
-    strcpy(c2, color2);
-    setParams(parametrs1, index1, c1);
-    setParams(parametrs2, index2, c2);
-    free(c1);
-    free(c2);
-    printf("%d %d %d %d\n", parametrs1[0], parametrs1[1], parametrs1[2], index1);
-    printf("%d %d %d %d\n", parametrs2[0], parametrs2[1], parametrs2[2], index2);
+    int *parametrs1 = (int *)calloc(4, sizeof(int));
+    int *parametrs2 = (int *)calloc(4, sizeof(int));
+    
+    setParams(parametrs1, index1, color1);
+    setParams(parametrs2, index2, color2);
+
+
     for(int i = 0; i < image->height; i++){
         png_byte *row = image->row_pointers[i];
         for(int j = 0; j < image->width; j++){
