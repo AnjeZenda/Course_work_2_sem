@@ -84,30 +84,30 @@ void printHelp(int arg){
     }
     if(arg == 2 || !arg){
         puts("-c --copy - copy pixels from one area to another");
-        puts("\t-l --leftup <value>,<value> - coordinates of upper-lefе corner");
-        puts("\t-r --rightlow <value>,<value> - coordinates of lower-right corner");
-        puts("\t-e --endleftup <value>,<value> - coordinates of the upper-left corner where the program paste copied area");
+        puts("\t-l --leftup <x_axis>,<y_axis> - coordinates of upper-lefе corner");
+        puts("\t-r --rightlow <x_axis>,<y_axis> - coordinates of lower-right corner");
+        puts("\t-e --endleftup <x_axis>,<y_axis> - coordinates of the upper-left corner where the program paste copied area");
         puts("");
     }
     if(arg == 3 || !arg){
         puts("-t --transform - change one color to another in a given area");
-        puts("\t -f --fromcolor - the color to change");
-        puts("\t -t --tocolor - the color to change the current color");
+        puts("\t -f --fromcolor <value>- the color to change");
+        puts("\t -t --tocolor <value> - the color to change the current color");
         puts("");
     }
     if(arg == 4 || !arg){
         puts("-f --frame - make a frame aroud the picture");
-        puts("\t -t --type - type of pattern");
-        puts("\t -c --color - color of pattern");
-        puts("\t -w --width - width of pattern");
+        puts("\t -t --type <value> - type of pattern");
+        puts("\t -c --color <value> - color of pattern");
+        puts("\t -w --width <value> - width of pattern");
         puts("");
     }
 
     if(arg == 5 || !arg){
         puts("-r --rects - find rectangles and make the frame around them");
-        puts("\t -c --color - color of rectanges");
-        puts("\t -f --framecolor - color of frame");
-        puts("\t -w -width - width of frame");
+        puts("\t -c --color <value> - color of rectanges");
+        puts("\t -f --framecolor <value> - color of frame");
+        puts("\t -w -width <value> - width of frame");
         puts("");
     }
     if(arg == 6){
