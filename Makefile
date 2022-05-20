@@ -19,5 +19,5 @@ rects.o: rects.c
 frames.o: frames.c
 	gcc -c frames.c
 
-remove:
+clean:
 	rm -r *.o && rm ./PNG.out
