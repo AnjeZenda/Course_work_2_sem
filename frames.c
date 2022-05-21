@@ -6,11 +6,9 @@ void drawCommon(sPng *image, char *color, char *width, int indicator){
     for(int i = 0; i < 10; i++)
         if(!strcmp(color, colours[i])) ind = i;
     int *parametrs = (int *)calloc(4, sizeof(int));
-    char *c = (char *)calloc(strlen(color) + 1, sizeof(char));
-    strcpy(c, color);
-    setParams(parametrs, ind, c);
-    free(c);
-    //if(!isNum(width)) return;
+    setParams(parametrs, ind, color);
+    if(!isNum(width)) return;
+    
     int i_width = atoi(width);
     int y;
     printf("%d %d %d\n", parametrs[0], parametrs[1], parametrs[2]);
@@ -60,11 +58,9 @@ void drawChess(sPng *image, char *color, char *width, int indicator){
     for(int i = 0; i < 10; i++)
         if(!strcmp(color, colours[i])) ind = i;
     int *parametrs = (int *)calloc(4, sizeof(int));
-    char *c = (char *)calloc(strlen(color) + 1, sizeof(char));
-    strcpy(c, color);
-    setParams(parametrs, ind, c);
-    free(c);
-    //if(!isNum(width)) return;
+    setParams(parametrs, ind, color);
+
+    if(!isNum(width)) return;
     int i_width = atoi(width);
     int y;
     for(y = 0; y < i_width; y++){
@@ -123,6 +119,22 @@ void drawChess(sPng *image, char *color, char *width, int indicator){
             }
         }
     }
+    free(parametrs);
+}
+
+void drawFractal(sPng *image, char *color, char *width, int indicator){
+    char colours[10][20] = {"red", "green", "blue", "gray", "yellow", "purple", "white", "black", "brown", "orange"};
+    int ind = -1;
+    for(int i = 0; i < 10; i++)
+        if(!strcmp(color, colours[i])) ind = i;
+    int *parametrs = (int *)calloc(4, sizeof(int));
+    setParams(parametrs, ind, color);
+    
+    if(!isNum(width)) return;
+
+    int i_width = atoi(width);
+    //! finish this!
+
     free(parametrs);
 }
 

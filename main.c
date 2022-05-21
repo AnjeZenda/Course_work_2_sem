@@ -46,7 +46,7 @@ int main(int argc, char **argv){
                 break;
             case 's':
                 puts("red, green, blue, gray, yellow, purple, white, black, cyan, orange");
-                puts("common, fractal, ");
+                puts("common, fractal, chess, lines");
                 break;
             case '?':
             default:
