@@ -1,5 +1,5 @@
 all: main.o help.o copy.o transform.o rects.o frames.o
-	gcc main.o help.o copy.o transform.o rects.o frames.o -lpng -o PNG.out && make clean
+	gcc main.o help.o copy.o transform.o rects.o frames.o -lpng -o PNG.out
 
 main.o: main.c
 	gcc -c main.c
