@@ -54,9 +54,6 @@ void copyAreaPNG(sPng *image, char *left_up, char *right_down, char *destination
             buf_ptr[0] = ptr[0];
             buf_ptr[1] = ptr[1];
             buf_ptr[2] = ptr[2];
-            // ptr[0] = 255; // red
-            // ptr[1] = 255; // green
-            // ptr[2] = 255; // blue
 
             if(color_indicator == 4) buf_ptr[3] = ptr[3];
             
@@ -98,15 +95,12 @@ void copyAreaGet(int argc, char **argv, int *opt_index, sPng *image, char *filen
         switch (opt)
         {
             case 'l':
-                puts("left");
                 start = optarg;
                 break;
             case 'r':
-                puts("right");
                 end = optarg;
                 break;
             case 'e':
-                puts("end");
                 dest = optarg;
                 break;
             case '?':

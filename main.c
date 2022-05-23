@@ -6,8 +6,13 @@ int main(int argc, char **argv){
     if(argc == 1){
         printHelp(argc);
     }
-    else if (!strstr(argv[argc-1], ".png") && (strcmp(argv[1], "-h") || strcmp(argv[1], "-s"))){
+    else if(argc == 2){
+        printHelp(0);
+        exit(0);
+    }
+    else if (!strstr(argv[argc-1], ".png")){
         printHelp(6);
+        exit(0);
     }
     else if(argc >= 3){
         strcpy(file_name, argv[--argc]);

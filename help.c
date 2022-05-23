@@ -77,9 +77,10 @@ void setParams(int *parametrs, int ind, char *colour){
 void printHelp(int arg){
     puts("-? -h --help\n");
     if(arg == 1 || !arg){
-        puts("the program has the following structre:\n\t<name_of_executable_file> <names_of_options> <file_name>");
-        puts("\tfile must have png format -> <file_name.png>");
+        puts("The program has the following structre:\n\t<name_of_executable_file> <names_of_options> <file_name>");
+        puts("\tFile must have png format -> <file_name.png>");
         puts("-s --standart - to learn standart colors that are used in the function transform and the frames that are used in the function frame");
+        puts("If you want to use all functions correctly write the file name in the end of your commands");
         puts("");
     }
     if(arg == 2 || !arg){

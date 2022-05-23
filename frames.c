@@ -276,15 +276,12 @@ void makeFrameGet(int argc, char **argv, int *opt_index, sPng *image, char *file
     {
         switch(opt){
             case 't':
-                puts("type");
                 frame_type = optarg;
                 break;
             case 'c':
-                puts("color");
                 color = optarg;
                 break;
             case 'w':
-                puts("width");
                 width = optarg;
                 break;
             case '?':
