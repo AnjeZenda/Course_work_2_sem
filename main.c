@@ -30,6 +30,7 @@ int main(int argc, char **argv){
     };
     int opt, opt_index;
     while((opt = getopt_long(argc, argv, opts, longOpt, &opt_index)) != -1){
+        
         switch(opt){
             case 'c':
                 copyAreaGet(argc, argv, &opt_index, &image, file_name);
@@ -51,7 +52,7 @@ int main(int argc, char **argv){
                 break;
             case 's':
                 puts("red, green, blue, gray, yellow, purple, white, black, cyan, orange");
-                puts("common, fractal, chess, lines");
+                puts("common, fractal, chess, tunnel");
                 break;
             case '?':
             default:
