@@ -69,6 +69,12 @@ void drawFractal(struct Png *image, char *color, char *width, int indicator){
 
     int i_width = atoi(width);
 
+    if(i_width * 2 > image->height || i_width * 2 > image->width){
+        free(parametrs);
+        puts("Too big width");
+        return;
+    }
+
     int maxDeg = findMaxDegree(i_width);    
     if(maxDeg == 0){
         free(parametrs);
@@ -124,7 +130,15 @@ void drawCommon(sPng *image, char *color, char *width, int indicator){
         return;
     }
     
+    
     int i_width = atoi(width);
+
+    if(i_width * 2 > image->height || i_width * 2 > image->width){
+        free(parametrs);
+        puts("Too big width");
+        return;
+    }
+
     int y;
     printf("%d %d %d\n", parametrs[0], parametrs[1], parametrs[2]);
     for(y = 0; y < i_width; y++){
@@ -184,6 +198,13 @@ void drawChess(sPng *image, char *color, char *width, int indicator){
         return;
     }
     int i_width = atoi(width);
+
+    if(i_width * 2 > image->height || i_width * 2 > image->width){
+        free(parametrs);
+        puts("Too big width");
+        return;
+    }
+
     int y;
     for(y = 0; y < i_width; y++){
         png_byte *row = image->row_pointers[y];
@@ -294,8 +315,10 @@ void drawTunnel(sPng *image, char *color, char *width, int indicator){
     }
     int i_width = atoi(width);
 
+
     if(image->height < 2 * i_width || image->width < 2 * i_width){
         free(parametrs);
+        puts("Too big width");
         return;
     }
     int small_x = image->width - 2 * i_width;
