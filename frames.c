@@ -102,7 +102,6 @@ void drawFractal(struct Png *image, char *color, char *width, int indicator){
     free(parametrs);
 }
 
-
 void drawCommon(sPng *image, char *color, char *width, int indicator){
     char colours[10][20] = {"red", "green", "blue", "gray", "yellow", "purple", "white", "black", "brown", "orange"};
     int ind = -1;
@@ -225,12 +224,80 @@ void drawChess(sPng *image, char *color, char *width, int indicator){
     free(parametrs);
 }
 
+void BresenhamAlgorithm(sPng *image, int x1, int y1, int x2, int y2, int *params, int indicator){
+    const int deltaX = abs(x2 - x1);
+    const int deltaY = abs(y2 - y1);
+    const int signX = x1 < x2 ? 1 : -1;
+    const int signY = y1 < y2 ? 1 : -1;
+    int error = deltaX - deltaY;
 
+    png_byte *ptry = image->row_pointers[y2];
+    png_byte *ptrx = &(ptry[x2*indicator]);
+    
+    for(int i = 0; i < indicator; i++) 
+        ptrx[i] = params[i];
+    
+    while (x1 != x2 || y1 != y2){
+        png_byte *row = image->row_pointers[y1];
+        png_byte *ptr = &(row[x1*indicator]);
+    
+        for(int i = 0; i < indicator; i++) 
+            ptr[i] = params[i];
+        int error2 = error * 2;
+        if(error2 > -deltaY){
+            error -= deltaY;
+            x1 += signX;
+        }
+        if(error2 < deltaX){
+            error += deltaX;
+            y1 += signY;
+        }
+    }
+    
+}
+
+void drawTunnel(sPng *image, char *color, char *width, int indicator){
+    char colours[10][20] = {"red", "green", "blue", "gray", "yellow", "purple", "white", "black", "brown", "orange"};
+    int ind = -1;
+    for(int i = 0; i < 10; i++)
+        if(!strcmp(color, colours[i])) ind = i;
+    int *parametrs = (int *)calloc(4, sizeof(int));
+    setParams(parametrs, ind, color);
+
+    if(!isNum(width)) return;
+    int i_width = atoi(width);
+
+    if(image->height < 2 * i_width || image->width < 2 * i_width){
+        return;
+    }
+    int small_x = image->width - 2 * i_width;
+    int small_y = image->height - 2 * i_width;
+
+    int line_width = (image->width/50) ? (image->width/50) : 2;
+    int space_width = (image->width/200) ? (image->width/200) : 2;
+
+    for(int y1 = 0; y1 < image->height; ++y1){
+        if(y1 % line_width >= space_width){
+            int y2 = (int)(small_y * (double)y1/image->height);
+            BresenhamAlgorithm(image, 0, y1, i_width - 1, y2 + i_width, parametrs, indicator);
+            BresenhamAlgorithm(image, image->width - 1, y1, image->width - i_width, y2 + i_width, parametrs, indicator);
+
+        }
+    }
+
+    for(int x1 = 0; x1 < image->width; ++x1){
+        if(x1 % line_width > space_width){
+            int x2 = (int)(small_x * (double)x1/image->width);
+            BresenhamAlgorithm(image, x1, 0, x2 + i_width, i_width - 1, parametrs, indicator);
+            BresenhamAlgorithm(image, x1, image->height - 1, x2 + i_width, image->height - i_width, parametrs, indicator);
+        }
+    }
+}
 
 void makeFramePNG(sPng *image, char *frame_type, char *width, char *color){
     int color_indicator = checkColorType(image);
     if(color_indicator == -1) return;
-    char frames[4][20] = {"common", "fractal", "lines", "chess"};
+    char frames[4][20] = {"common", "fractal", "tunnel", "chess"};
     int flag = -1;
     for(int i = 0; i < 4; i++){
         if(!strcmp(frame_type, frames[i])){
@@ -250,8 +317,7 @@ void makeFramePNG(sPng *image, char *frame_type, char *width, char *color){
             drawFractal(image, color, width, color_indicator);
             break;
         case 2:
-            //drawLines(image, color, width, color_indicator);
-            puts("While nothing");
+            drawTunnel(image, color, width, color_indicator);
             break;
         case 3:
             drawChess(image, color, width, color_indicator);
