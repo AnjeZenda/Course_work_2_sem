@@ -13,7 +13,7 @@ int setParams(int *parametrs, int ind, char *colour){
     char *color = (char *)calloc(strlen(colour) + 1, sizeof(char));
     if(!color) return 0;
     strcpy(color, colour);
-    int i = 0;
+    int i = 0, num;
     char *ptr;
     parametrs[3] = 255;
     switch (ind)
@@ -27,7 +27,15 @@ int setParams(int *parametrs, int ind, char *colour){
                     puts("Wrong color");
                     return 0;
                 }
-                parametrs[i++] = atoi(ptr);
+                num = atoi(ptr);
+                if(num > 255 || num < 0){
+                    free(color);
+                    puts("Wrong argument of RGB/RGBA code");
+                    printf("%d %c %d\n", num, num>255?'>':'<', num>255?255:0);
+                    return 0;
+
+                }
+                parametrs[i++] = num;
                 ptr = strtok(NULL, ",");
             }
             break;
@@ -83,10 +91,11 @@ int setParams(int *parametrs, int ind, char *colour){
 void printHelp(int arg){
     puts("-? -h --help\n");
     if(arg == 1 || !arg){
-        puts("The program has the following structre:\n\t<name_of_executable_file> <names_of_options> <file_name>");
+        puts("The program has the following structure:\n\t<name_of_executable_file> <names_of_options> <file_name>");
         puts("\tFile must have png format -> <file_name.png>");
         puts("-s --standart - to learn standart colors that are used in the function transform and the frames that are used in the function frame");
         puts("If you want to use all functions correctly write the file name in the end of your commands");
+        puts("If you want to enter the code of color in RGB or RGBA the structure must be <Red_Component>,<Green_Component>,<Blue_Component>,<Alpha_Component>\n(The last one uses if you have RGBA picture)");
         puts("");
     }
     if(arg == 2 || !arg){
@@ -116,7 +125,7 @@ void printHelp(int arg){
         puts("-r --rects - find rectangles and make the frame around them");
         puts("\t -c --color <value> - color of rectanges");
         puts("\t -f --framecolor <value> - color of frame");
-        puts("\t -w -width <value> - width of frame");
+        puts("\t -w --width <value> - width of frame");
         puts("");
     }
     if(arg == 6){
