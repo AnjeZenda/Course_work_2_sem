@@ -60,6 +60,5 @@ int main(int argc, char **argv){
                 break;
         }
     }
-    puts("Done");
     return 0;
 }

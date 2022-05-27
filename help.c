@@ -9,9 +9,9 @@ int isNum(char *str){
     return 1;
 }
 
-void setParams(int *parametrs, int ind, char *colour){
+int setParams(int *parametrs, int ind, char *colour){
     char *color = (char *)calloc(strlen(colour) + 1, sizeof(char));
-    if(!color) return;
+    if(!color) return 0;
     strcpy(color, colour);
     int i = 0;
     char *ptr;
@@ -22,6 +22,11 @@ void setParams(int *parametrs, int ind, char *colour){
             i = 0;
             ptr = strtok(color, ",");
             while(ptr){
+                if(!isNum(ptr)){
+                    free(color);
+                    puts("Wrong color");
+                    return 0;
+                }
                 parametrs[i++] = atoi(ptr);
                 ptr = strtok(NULL, ",");
             }
@@ -36,9 +41,9 @@ void setParams(int *parametrs, int ind, char *colour){
             parametrs[2] = 255;
             break;
         case 3:
-            parametrs[0] = 190;
-            parametrs[1] = 190;
-            parametrs[2] = 190;
+            parametrs[0] = 150;
+            parametrs[1] = 150;
+            parametrs[2] = 150;
             break;
         case 4:
             parametrs[0] = 255;
@@ -72,6 +77,7 @@ void setParams(int *parametrs, int ind, char *colour){
             break;
     }
     free(color);
+    return 1;
 }
 
 void printHelp(int arg){
@@ -85,9 +91,11 @@ void printHelp(int arg){
     }
     if(arg == 2 || !arg){
         puts("-c --copy - copy pixels from one area to another");
-        puts("\t-l --leftup <x_axis>,<y_axis> - coordinates of upper-lefе corner");
+        puts("\t-l --leftup <x_axis>,<y_axis> - coordinates of upper-left corner");
         puts("\t-r --rightlow <x_axis>,<y_axis> - coordinates of lower-right corner");
         puts("\t-e --endleftup <x_axis>,<y_axis> - coordinates of the upper-left corner where the program paste copied area");
+        puts("");
+        puts("WARNING: y axis directed from top to bottom\nupper-left corner has coordinates (0,0) and lower-left corner has coordinates (0, height of picture - 1)");
         puts("");
     }
     if(arg == 3 || !arg){

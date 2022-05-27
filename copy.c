@@ -13,12 +13,17 @@ void copyAreaPNG(sPng *image, char *left_up, char *right_down, char *destination
     strcpy(dest, destination);
     int startx, starty, endx, endy, destx, desty;
     char *ptr1 = strtok(start, ","), *ptr2 = strtok(NULL, ",");
+    
     if(isNum(ptr1) && isNum(ptr2)){ 
         startx = atoi(ptr1);
         starty = atoi(ptr2);
     }
     else{
         puts("Start point has wrong arguments");
+        free(start);
+        free(end);
+        free(dest);
+        return;
     }
     ptr1 = strtok(end, ","), ptr2 = strtok(NULL, ",");
     if(isNum(ptr1) && isNum(ptr2)){ 
@@ -27,6 +32,10 @@ void copyAreaPNG(sPng *image, char *left_up, char *right_down, char *destination
     }
     else{
         puts("End point has wrong arguments");
+        free(start);
+        free(end);
+        free(dest);
+        return;
     }
     ptr1 = strtok(dest, ","), ptr2 = strtok(NULL, ",");
     if(isNum(ptr1) && isNum(ptr2)){ 
@@ -35,12 +44,39 @@ void copyAreaPNG(sPng *image, char *left_up, char *right_down, char *destination
     }
     else{
         puts("Destination point has wrong arguments");
+        free(start);
+        free(end);
+        free(dest);
+        return;
     }
 
     free(start);
     free(end);
     free(dest);
-    
+
+    if(starty < 0 || starty >= image->height || startx < 0 || startx >= image->width){
+        puts("Wrong position start");
+        return;
+    }
+
+    if(endy < 0 || endy >= image->height || endx < 0 || endx >= image->width){
+        puts("Wrong position end");
+        return;
+    }
+
+    if(desty < 0 || desty >= image->height || destx < 0 || destx >= image->width){
+        puts("Wrong position destination");
+        return;
+    }
+
+    if(startx >= endx || starty >= endy){
+        puts("Start positions bigger then end ones");
+        puts("   Start pos    End pos");
+        if(startx >= endx) printf("x: %d    >      %d\n", startx, endx);
+        if(starty >= endy) printf("y: %d    >      %d\n", starty, endy);
+        return;
+    }
+
     png_bytep *buf = (png_bytep *)calloc(endy - starty,sizeof(png_bytep));
     for(int i = 0; i < endy - starty; i++)
         buf[i] = (png_byte *)calloc(1, png_get_rowbytes(image->png_ptr, image->info_ptr));

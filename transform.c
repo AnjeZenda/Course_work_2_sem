@@ -42,9 +42,12 @@ void transformPNG(sPng *image, char *color1, char *color2){
     }
     int *parametrs1 = (int *)calloc(4, sizeof(int));
     int *parametrs2 = (int *)calloc(4, sizeof(int));
-    
-    setParams(parametrs1, index1, color1);
-    setParams(parametrs2, index2, color2);
+
+    if(!setParams(parametrs1, index1, color1) || !setParams(parametrs2, index2, color2)){
+        free(parametrs1);
+        free(parametrs2);
+        return;
+    }
 
 
     for(int i = 0; i < image->height; i++){

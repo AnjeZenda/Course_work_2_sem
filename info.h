@@ -25,7 +25,7 @@ typedef struct Rect{
 
 void printHelp(int arg);
 int isNum(char *str);
-void setParams(int *parametrs, int ind, char *color);
+int setParams(int *parametrs, int ind, char *color);
 int checkColorType(sPng *image);
 
 /*----------HELPING FUNCTIONS----------*/

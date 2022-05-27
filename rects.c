@@ -97,8 +97,11 @@ void rectsPNG(sPng *image, char *rect_color, char *frame_color, char *width){
 
     int *rects_par = (int *)calloc(4, sizeof(int));
     int *frame_par = (int *)calloc(4, sizeof(int));
-    setParams(rects_par, index_rect, rect_color);
-    setParams(frame_par, index_frame, frame_color);
+    if(!setParams(rects_par, index_rect, rect_color) || !setParams(frame_par, index_frame, frame_color)){
+        free(rects_par);
+        free(frame_par);
+        return;
+    }
 
     int rect_count = 0;
     Rect *arr_rects = (Rect *)calloc(image->height / 2, sizeof(Rect));
@@ -135,7 +138,13 @@ void rectsPNG(sPng *image, char *rect_color, char *frame_color, char *width){
         return;
     }
 
-    if(!isNum(width)) return;
+    if(!isNum(width)){
+        puts("Wrong width");
+        free(rects_par);
+        free(frame_par);
+        free(arr_rects);
+        return;
+    }
 
     drawRectFrame(image, arr_rects, frame_par, atoi(width), rect_count, color_indicator);
     free(frame_par);

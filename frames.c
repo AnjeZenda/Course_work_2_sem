@@ -56,12 +56,17 @@ void drawFractal(struct Png *image, char *color, char *width, int indicator){
     for(int i = 0; i < 10; i++)
         if(!strcmp(color, colours[i])) ind = i;
     int *parametrs = (int *)calloc(4, sizeof(int));
-    char *c = (char *)calloc(strlen(color) + 1, sizeof(char));
-    strcpy(c, color);
-    setParams(parametrs, ind, c);
-    free(c);
-    printf("%d %d %d %d\n", parametrs[0], parametrs[1], parametrs[2], parametrs[3]);
-    if(!isNum(width)) return;
+
+    if(!setParams(parametrs, ind, color)){
+        free(parametrs);
+        return;
+    }
+    if(!isNum(width)) {
+        free(parametrs);
+        puts("Wrong width");
+        return;
+    }
+
     int i_width = atoi(width);
 
     int maxDeg = findMaxDegree(i_width);    
@@ -103,13 +108,21 @@ void drawFractal(struct Png *image, char *color, char *width, int indicator){
 }
 
 void drawCommon(sPng *image, char *color, char *width, int indicator){
-    char colours[10][20] = {"red", "green", "blue", "gray", "yellow", "purple", "white", "black", "brown", "orange"};
+    char colours[10][20] = {"red", "green", "blue", "gray", "yellow", "purple", "white", "black", "cyan", "orange"};
     int ind = -1;
     for(int i = 0; i < 10; i++)
         if(!strcmp(color, colours[i])) ind = i;
     int *parametrs = (int *)calloc(4, sizeof(int));
-    setParams(parametrs, ind, color);
-    if(!isNum(width)) return;
+    
+    if(!setParams(parametrs, ind, color)){
+        free(parametrs);
+        return;
+    }
+    if(!isNum(width)) {
+        free(parametrs);
+        puts("Wrong width");
+        return;
+    }
     
     int i_width = atoi(width);
     int y;
@@ -155,14 +168,21 @@ void drawCommon(sPng *image, char *color, char *width, int indicator){
 }
 
 void drawChess(sPng *image, char *color, char *width, int indicator){
-    char colours[10][20] = {"red", "green", "blue", "gray", "yellow", "purple", "white", "black", "brown", "orange"};
+    char colours[10][20] = {"red", "green", "blue", "gray", "yellow", "purple", "white", "black", "cyan", "orange"};
     int ind = -1;
     for(int i = 0; i < 10; i++)
         if(!strcmp(color, colours[i])) ind = i;
     int *parametrs = (int *)calloc(4, sizeof(int));
-    setParams(parametrs, ind, color);
-
-    if(!isNum(width)) return;
+    
+    if(!setParams(parametrs, ind, color)){
+        free(parametrs);
+        return;
+    }
+    if(!isNum(width)) {
+        free(parametrs);
+        puts("Wrong width");
+        return;
+    }
     int i_width = atoi(width);
     int y;
     for(y = 0; y < i_width; y++){
@@ -257,17 +277,25 @@ void BresenhamAlgorithm(sPng *image, int x1, int y1, int x2, int y2, int *params
 }
 
 void drawTunnel(sPng *image, char *color, char *width, int indicator){
-    char colours[10][20] = {"red", "green", "blue", "gray", "yellow", "purple", "white", "black", "brown", "orange"};
+    char colours[10][20] = {"red", "green", "blue", "gray", "yellow", "purple", "white", "black", "cyan", "orange"};
     int ind = -1;
     for(int i = 0; i < 10; i++)
         if(!strcmp(color, colours[i])) ind = i;
     int *parametrs = (int *)calloc(4, sizeof(int));
-    setParams(parametrs, ind, color);
+    if(!setParams(parametrs, ind, color)){
+        free(parametrs);
+        return;
+    }
 
-    if(!isNum(width)) return;
+    if(!isNum(width)){
+        free(parametrs);
+        puts("Wrong width");
+        return;
+    }
     int i_width = atoi(width);
 
     if(image->height < 2 * i_width || image->width < 2 * i_width){
+        free(parametrs);
         return;
     }
     int small_x = image->width - 2 * i_width;
@@ -292,6 +320,7 @@ void drawTunnel(sPng *image, char *color, char *width, int indicator){
             BresenhamAlgorithm(image, x1, image->height - 1, x2 + i_width, image->height - i_width, parametrs, indicator);
         }
     }
+    free(parametrs);
 }
 
 void makeFramePNG(sPng *image, char *frame_type, char *width, char *color){
@@ -353,6 +382,7 @@ void makeFrameGet(int argc, char **argv, int *opt_index, sPng *image, char *file
             case '?':
             default:
                 printHelp(4);
+                exit(0);
                 break;
         }
     }
