@@ -33,8 +33,8 @@ int checkColorType(sPng *image);
 
 /*----------PNG FUNCTIONS----------*/
 
-void readPNG(char *filename, sPng *image);
-void writePNG(char *filename, sPng *image);
+int readPNG(char *filename, sPng *image);
+int writePNG(char *filename, sPng *image);
 void copyAreaPNG(sPng *image, char *left_up, char *right_down, char *destination);
 void transformPNG(sPng *image, char *color1, char *color2);
 void makeFramePNG(sPng *image, char *frame_type, char *width, char *color);

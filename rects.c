@@ -153,7 +153,9 @@ void rectsPNG(sPng *image, char *rect_color, char *frame_color, char *width){
 }
 
 void rectsGet(int argc, char **argv, int *opt_index, sPng *image, char *filename){
-    readPNG(filename, image);
+    if(!readPNG(filename, image)){
+        exit(0);
+    }
     const char *opts = "c:f:w:?";
     struct option lOpt[] = {
         {"color", required_argument, NULL, 'c'},
@@ -182,5 +184,7 @@ void rectsGet(int argc, char **argv, int *opt_index, sPng *image, char *filename
         }
     }
     rectsPNG(image, rect_color, frame_color, width);
-    writePNG(filename, image);
+    if(!writePNG(filename, image)){
+        exit(0);
+    } 
 }

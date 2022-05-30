@@ -383,7 +383,9 @@ void makeFramePNG(sPng *image, char *frame_type, char *width, char *color){
 }
 
 void makeFrameGet(int argc, char **argv, int *opt_index, sPng *image, char *filename){
-    readPNG(filename, image);
+    if(!readPNG(filename, image)){
+        exit(0);
+    }
     const char *opts = "t:c:w:?";
     struct option lOpt[] = {
         {"type", required_argument, NULL, 't'},
@@ -413,6 +415,8 @@ void makeFrameGet(int argc, char **argv, int *opt_index, sPng *image, char *file
         }
     }
     makeFramePNG(image, frame_type, width, color);
-    writePNG(filename, image);   
+    if(!writePNG(filename, image)){
+        exit(0);
+    }   
 }
 

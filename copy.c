@@ -117,7 +117,9 @@ void copyAreaPNG(sPng *image, char *left_up, char *right_down, char *destination
 
 
 void copyAreaGet(int argc, char **argv, int *opt_index, sPng *image, char *filename){
-    readPNG(filename, image);
+    if(!readPNG(filename, image)){
+        exit(0);
+    }
     const char *opts = "l:r:e:?";
     struct option lOpt[] = {
         {"leftup", required_argument, NULL, 'l'},
@@ -146,5 +148,7 @@ void copyAreaGet(int argc, char **argv, int *opt_index, sPng *image, char *filen
         }
     }
     copyAreaPNG(image, start, end, dest);
-    writePNG(filename, image);
+    if(!writePNG(filename, image)){
+        exit(0);
+    } 
 }

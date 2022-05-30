@@ -134,22 +134,43 @@ void printHelp(int arg){
     }
 }
 
-void readPNG(char *filename, sPng *image){
+int readPNG(char *filename, sPng *image){
     FILE *fp = fopen(filename, "rb");
     char header[8];
-    if(!fp) {fclose(fp); exit(0);};
+    if(!fp) {
+        puts("Could not read file");
+        return 0;
+    };
     
     fread(header, 1, 8, fp);
 
-    if(png_sig_cmp(header, 0, 8)) {fclose(fp); exit(0);}
+    if(png_sig_cmp(header, 0, 8)) {
+        fclose(fp);
+        puts("Could not reead header");
+        return 0;
+    }
     
     image->png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-    if(!image->png_ptr) {fclose(fp); exit(0);}
+    if(!image->png_ptr) {
+        fclose(fp);
+        puts("Could not create read struct");
+        return 0;
+    }
     
     image->info_ptr = png_create_info_struct(image->png_ptr);
-    if(!image->info_ptr) {fclose(fp); exit(0);}
+    if(!image->info_ptr) {
+        png_destroy_read_struct(&image->png_ptr, (png_infopp)NULL, (png_infopp)NULL);
+        fclose(fp);
+        puts("Could not create info struct");
+        return 0;
+    }
 
-    if(setjmp(png_jmpbuf(image->png_ptr))) {fclose(fp); exit(0);}
+    if(setjmp(png_jmpbuf(image->png_ptr))) {
+        png_destroy_read_struct(&image->png_ptr, &image->info_ptr, (png_infopp)NULL);
+        fclose(fp);
+        puts("Something went wrong");
+        return 0;
+    }
 
     png_init_io(image->png_ptr, fp);
     png_set_sig_bytes(image->png_ptr, 8);
@@ -162,7 +183,12 @@ void readPNG(char *filename, sPng *image){
     image->number_of_passes = png_set_interlace_handling(image->png_ptr);
     png_read_update_info(image->png_ptr, image->info_ptr);
 
-    if(setjmp(png_jmpbuf(image->png_ptr))) {fclose(fp); exit(0);}
+    if(setjmp(png_jmpbuf(image->png_ptr))) {
+        png_destroy_read_struct(&image->png_ptr, &image->info_ptr, (png_infopp)NULL);
+        fclose(fp);
+        puts("Something went wrong");
+        return 0;
+    }
 
     image->row_pointers = (png_bytep *)calloc(image->height, sizeof(png_bytep));
     for(int i = 0; i < image->height; i++){
@@ -171,14 +197,25 @@ void readPNG(char *filename, sPng *image){
 
     png_read_image(image->png_ptr, image->row_pointers);
 
-
+    return 1;
     fclose(fp);
 }
 
-void writePNG(char *filename, sPng *image){
+int writePNG(char *filename, sPng *image){
     FILE *fout = fopen(filename, "wb");
+
+    if(!fout){
+        puts("Could not read file");
+        return 0;
+    }
+
     image->png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-    if(!image->png_ptr){fclose(fout); exit(0);}
+
+    if(!image->png_ptr){
+        fclose(fout);
+        return 0;
+    }
+    
     image->info_ptr = png_create_info_struct(image->png_ptr);
 
     png_init_io(image->png_ptr, fout);

@@ -1,7 +1,9 @@
 #include "info.h"
 
 void transformGet(int argc, char **argv, int *opt_index, sPng *image, char *filename){
-    readPNG(filename, image);
+    if(!readPNG(filename, image)){
+        exit(0);
+    }
     const char *opts = "f:t:?";
     struct option lOpt[] = {
         {"fromcolor", required_argument, NULL, 'f'},
@@ -26,7 +28,9 @@ void transformGet(int argc, char **argv, int *opt_index, sPng *image, char *file
         }
     }
     transformPNG(image, color1, color2);
-    writePNG(filename, image);
+    if(!writePNG(filename, image)){
+        exit(0);
+    }
 }
 
 void transformPNG(sPng *image, char *color1, char *color2){
