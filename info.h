@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <png.h>
+#include <setjmp.h>
 
 typedef struct Png{
     int width, height;
