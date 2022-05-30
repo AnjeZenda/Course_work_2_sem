@@ -1,16 +1,13 @@
 #include "info.h"
 
 void transformGet(int argc, char **argv, int *opt_index, sPng *image, char *filename){
-    if(!readPNG(filename, image)){
-        exit(0);
-    }
     const char *opts = "f:t:?";
     struct option lOpt[] = {
         {"fromcolor", required_argument, NULL, 'f'},
         {"tocolor", required_argument, NULL, 't'},
         {NULL, 0, NULL, 0}
     };
-    char *color1, *color2;
+    char *color1 = NULL, *color2 = NULL;
     int opt;
     while(-1 != (opt = getopt_long(argc, argv, opts, lOpt, opt_index))){
         switch (opt)
@@ -24,8 +21,16 @@ void transformGet(int argc, char **argv, int *opt_index, sPng *image, char *file
             case '?':
             default:
                 printHelp(3);
+                writePNG(filename, image);
+                exit(0);
                 break;
         }
+    }
+    if(color1 == NULL || color2 == NULL){
+        puts("You did not choose one or more options of transform command");
+        printHelp(5);
+        writePNG(filename, image);
+        exit(0);
     }
     transformPNG(image, color1, color2);
     if(!writePNG(filename, image)){

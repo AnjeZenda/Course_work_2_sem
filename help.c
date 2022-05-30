@@ -264,3 +264,30 @@ int checkColorType(sPng *image){
             break;
     }
 }
+
+void info(sPng *image){
+    puts("Standart colors");
+    puts("\t*black\n\t*yellow\n\t*orange\n\t*white\n\t*green\n\t*blue\n\t*cyan\n\t*gray\n\t*red\n\t*purple");
+    puts("");
+    puts("Standart frames");
+    puts("\t*common\n\t*fractal\n\t*tunnel\n\t*chess");
+    int color;
+    switch (checkColorType(image))
+    {
+    case -1:
+        exit(0);
+        break;
+    case 3:
+        color = 3;
+        break;
+    case 4:
+        color = 4;
+        break;
+    default:
+        break;
+    }
+    printf("Color type - %s\n", color == 3 ? "RGB" : "RGBA");
+    printf("Color depth - %d\n", image->bit_depth);
+    printf("Height of the picture - %d\n", image->height);
+    printf("Width of the picture - %d\n", image->width);
+}

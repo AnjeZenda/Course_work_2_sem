@@ -28,6 +28,7 @@ void printHelp(int arg);
 int isNum(char *str);
 int setParams(int *parametrs, int ind, char *color);
 int checkColorType(sPng *image);
+void info(sPng *image);
 
 /*----------HELPING FUNCTIONS----------*/
 

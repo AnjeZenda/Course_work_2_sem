@@ -153,9 +153,6 @@ void rectsPNG(sPng *image, char *rect_color, char *frame_color, char *width){
 }
 
 void rectsGet(int argc, char **argv, int *opt_index, sPng *image, char *filename){
-    if(!readPNG(filename, image)){
-        exit(0);
-    }
     const char *opts = "c:f:w:?";
     struct option lOpt[] = {
         {"color", required_argument, NULL, 'c'},
@@ -163,7 +160,7 @@ void rectsGet(int argc, char **argv, int *opt_index, sPng *image, char *filename
         {"width", required_argument, NULL, 'w'},
         {NULL, 0, NULL, 0}
     };
-    char *rect_color, *frame_color, *width;
+    char *rect_color = NULL, *frame_color = NULL, *width = NULL;
     int opt;
     while (-1 != (opt = getopt_long(argc, argv, opts, lOpt, opt_index)))
     {
@@ -180,8 +177,16 @@ void rectsGet(int argc, char **argv, int *opt_index, sPng *image, char *filename
             case '?':
             default:
                 printHelp(5);
+                writePNG(filename, image);
+                exit(0);
                 break;
         }
+    }
+    if(rect_color == NULL || frame_color == NULL || width == NULL){
+        puts("You did not choose one or more options of rectangle command");
+        printHelp(5);
+        writePNG(filename, image);
+        exit(0);
     }
     rectsPNG(image, rect_color, frame_color, width);
     if(!writePNG(filename, image)){

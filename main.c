@@ -6,7 +6,7 @@ int main(int argc, char **argv){
     if(argc == 1){
         printHelp(argc);
     }
-    else if(argc == 2){
+    else if(argc == 2 && (!strcmp("-h", argv[argc-1]) || !strcmp("--help", argv[argc-1]))){
         printHelp(0);
         exit(0);
     }
@@ -28,6 +28,10 @@ int main(int argc, char **argv){
         {"quit", no_argument, NULL, 'q'},
         {NULL, 0, NULL, 0}
     };
+    if(!readPNG(file_name, &image)){
+        puts("Wrong");
+        exit(0);
+    }
     int opt, opt_index;
     while((opt = getopt_long(argc, argv, opts, longOpt, &opt_index)) != -1){
         
@@ -51,8 +55,7 @@ int main(int argc, char **argv){
                 exit(0);
                 break;
             case 's':
-                puts("red, green, blue, gray, yellow, purple, white, black, cyan, orange");
-                puts("common, fractal, chess, tunnel");
+                info(&image);
                 break;
             case '?':
             default:

@@ -383,9 +383,6 @@ void makeFramePNG(sPng *image, char *frame_type, char *width, char *color){
 }
 
 void makeFrameGet(int argc, char **argv, int *opt_index, sPng *image, char *filename){
-    if(!readPNG(filename, image)){
-        exit(0);
-    }
     const char *opts = "t:c:w:?";
     struct option lOpt[] = {
         {"type", required_argument, NULL, 't'},
@@ -393,7 +390,7 @@ void makeFrameGet(int argc, char **argv, int *opt_index, sPng *image, char *file
         {"width", required_argument, NULL, 'w'},
         {NULL, 0, NULL, 0}
     };
-    char *frame_type, *width, *color;
+    char *frame_type = NULL, *width = NULL, *color = NULL;
     int opt;
     while (-1 != (opt = getopt_long(argc, argv, opts, lOpt, opt_index)))
     {
@@ -410,9 +407,16 @@ void makeFrameGet(int argc, char **argv, int *opt_index, sPng *image, char *file
             case '?':
             default:
                 printHelp(4);
+                writePNG(filename, image);
                 exit(0);
                 break;
         }
+    }
+    if(frame_type == NULL || color == NULL || width == NULL){
+        puts("You did not choose one or more options of frames command");
+        printHelp(5);
+        writePNG(filename, image);
+        exit(0);
     }
     makeFramePNG(image, frame_type, width, color);
     if(!writePNG(filename, image)){
