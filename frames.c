@@ -348,7 +348,10 @@ void drawTunnel(sPng *image, char *color, char *width, int indicator){
 
 void makeFramePNG(sPng *image, char *frame_type, char *width, char *color){
     int color_indicator = checkColorType(image);
-    if(color_indicator == -1) return;
+    if(color_indicator == -1){
+        puts("Wrong color indicator expected RGB or RGBA");
+        return;
+    }
     char frames[4][20] = {"common", "fractal", "tunnel", "chess"};
     int flag = -1;
     for(int i = 0; i < 4; i++){
