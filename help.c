@@ -213,6 +213,7 @@ int writePNG(char *filename, sPng *image){
 
     if(!image->png_ptr){
         fclose(fout);
+        png_destroy_write_struct(&image->png_ptr, (png_infopp)NULL);
         return 0;
     }
     
@@ -220,16 +221,28 @@ int writePNG(char *filename, sPng *image){
 
     png_init_io(image->png_ptr, fout);
     
-    if(setjmp(png_jmpbuf(image->png_ptr))){fclose(fout); exit(0);}
+    if(setjmp(png_jmpbuf(image->png_ptr))){
+            fclose(fout);
+            png_destroy_write_struct(&image->png_ptr, &image->info_ptr);
+            return 0;
+        }
     
     png_set_IHDR(image->png_ptr, image->info_ptr, image->width, image->height, image->bit_depth, image->color_type, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
     png_write_info(image->png_ptr, image->info_ptr);
 
-    if(setjmp(png_jmpbuf(image->png_ptr))){fclose(fout); exit(0);}
+    if(setjmp(png_jmpbuf(image->png_ptr))){
+        fclose(fout);
+        png_destroy_write_struct(&image->png_ptr, &image->info_ptr);
+        return 0;
+    }
 
     png_write_image(image->png_ptr, image->row_pointers);
 
-    if(setjmp(png_jmpbuf(image->png_ptr))){fclose(fout); exit(0);}
+    if(setjmp(png_jmpbuf(image->png_ptr))){
+        fclose(fout);
+        png_destroy_write_struct(&image->png_ptr, &image->info_ptr);
+        return 0;
+    }
 
     png_write_end(image->png_ptr, NULL);
     for(int i = 0; i < image->height; i++){
