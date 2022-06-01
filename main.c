@@ -5,6 +5,7 @@ int main(int argc, char **argv){
     char file_name[50];
     if(argc == 1){
         printHelp(argc);
+        exit(0);
     }
     else if(argc == 2 && (!strcmp("-h", argv[argc-1]) || !strcmp("--help", argv[argc-1]))){
         printHelp(0);
